@@ -1,7 +1,7 @@
 /**
  * meta除了原生参数外可配置的参数:
  * meta: {
- *  showAlways: (false)  父菜单是否总是显示折叠，默认子菜单大于一才显示折叠
+ *  showFirstOnly: (true)  是否隐藏折叠菜单，当子菜单有一个时生效
  *  noLogin: (false)  设为true后将不进行登录验证
  *  noAccess: (false)  设为true后将不进行权限验证
  *  hideMenu: (false) 设为true后在左侧菜单不会显示该页面选项
@@ -17,7 +17,7 @@
 
 import Main from '@/components/main'
 export default [
-    { 
+    {
         path: '/', 
         name:'_home',
         redirect:'/home',
@@ -37,13 +37,22 @@ export default [
                 component: () => import('@/view/home/home.vue'),
             }
         ]
-    },{ 
+    },
+    {
+        path: '/home3', 
+        name:'home3',
+        meta:{
+            title:'首页3',
+            icon:'el-icon-s-home'
+        },
+        component: () => import('@/view/home/home.vue'),
+    },
+    { 
         path: '/about', 
         name: 'about', 
         component: Main,
         meta:{
-            title:'其他',
-            showAlways:true,
+            title:'其他1',
             icon:'el-icon-s-cooperation'
         },
         children: [
@@ -51,10 +60,18 @@ export default [
                 path: '/index', 
                 name: 'aboutIndex', 
                 meta:{
-                    title:'其他'
+                    title:'其他2'
                 },
-                component: () => import('@/view/about/index')
+                component: () => import('@/view/about/index'),
+                children:[{
+                    path: '/home2', 
+                    name:'home2',
+                    meta:{
+                        title:'首页',
+                    },
+                    component: () => import('@/view/home/home.vue'),
+                }],
             }
         ]
-    },
+    }
 ]

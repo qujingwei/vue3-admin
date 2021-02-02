@@ -1,5 +1,5 @@
 export const showChildren = function(item){
-    return (item.children && item.children.length) > 1 || item.meta.showAlways
+    return item.children && item.children.length > 0
 }
 export const getName = function (item,children0) {
     return children0 ? item.children[0].name : item.name

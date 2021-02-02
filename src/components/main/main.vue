@@ -42,9 +42,9 @@ export default {
       return useStore().getters.menuList
     })
 
-    onBeforeRouteLeave((to) => {
-      console.log(11111)
-      console.log(to)
+    onBeforeRouteLeave(() => {
+      
+      // console.log(to)
     })
     return {
       menuList,
