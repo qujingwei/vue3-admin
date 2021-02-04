@@ -38,15 +38,6 @@ export default [
             }
         ]
     },
-    {
-        path: '/home3', 
-        name:'home3',
-        meta:{
-            title:'首页3',
-            icon:'el-icon-s-home'
-        },
-        component: () => import('@/view/home/home.vue'),
-    },
     { 
         path: '/about', 
         name: 'about', 
@@ -63,15 +54,15 @@ export default [
                     title:'其他2'
                 },
                 component: () => import('@/view/about/index'),
-                children:[{
-                    path: '/home2', 
-                    name:'home2',
-                    meta:{
-                        title:'首页',
-                    },
-                    component: () => import('@/view/home/home.vue'),
-                }],
             }
         ]
-    }
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'error_404',
+        meta: {
+            hideMenu: true
+        },
+        component: () => import('@/view/error-page/404.vue')
+      }
 ]

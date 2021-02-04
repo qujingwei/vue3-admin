@@ -4,25 +4,66 @@
     <side-menu @on-select='turnToPage' :menu-list="menuList"></side-menu>
     <el-container>
       <el-header></el-header>
+      <tag-nav :list='tagList' :value="currentRoute" @on-select="tagSelect" @on-close="tagClose"></tag-nav>
       <el-main>
-        <router-view></router-view>
+        <div class="main-warp">
+          <router-view></router-view>
+        </div>
       </el-main>
     </el-container>
   </el-container>
 </template>
 <script>
 import SideMenu from './components/side/side-menu.vue'
+import TagNav from './components/tag-nav'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
-import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { onMounted } from 'vue'
+import { routerEqual, getNextRoute } from '@/libs/utils'
 export default {
   name: 'Main',
   components:{
-    SideMenu
+    SideMenu,
+    TagNav
   },
   setup(){
-    let router = useRouter()
+    const store = useStore()
+    const router = useRouter()
+    const currentRoute = router.currentRoute
+    let tagList = store.state.app.tagNavList
+    const addTag = function(route){
+      const { name, params, query, meta, path } = route
+      store.commit('addTag',{ name, params, query, meta, path })
+    }
+    
+    onMounted(() => {
+      addTag(currentRoute.value)
+    })
+    // 路由变化
+    onBeforeRouteLeave((to) => {
+      addTag(to)
+    })
 
+    // tag标签逻辑
+    const tagSelect = function(route){
+      turnToPage(route)
+    }
+    const tagClose = function(route, type){
+      if(type === 'all'){
+        console.log('all');
+      }else if(type === 'other'){
+        console.log('other');
+      }else{
+        if(routerEqual(route, currentRoute.value)){
+          let nextRoute = getNextRoute(tagList, route)
+          turnToPage(nextRoute)
+        }
+        const list = tagList.filter(item => !routerEqual(route, item))
+        store.commit('setTagNavList', list)
+      }
+    }
+
+    // 页面跳转
     const turnToPage = function(route){
       let {name, params, query} = {}
       if(typeof route === 'string'){
@@ -38,17 +79,14 @@ export default {
         query
       })
     }
-    let menuList = computed(() => {
-      return useStore().getters.menuList
-    })
-
-    onBeforeRouteLeave(() => {
-      
-      // console.log(to)
-    })
+    
     return {
-      menuList,
-      turnToPage
+      menuList:store.getters.menuList,
+      tagList,
+      currentRoute,
+      turnToPage,
+      tagSelect,
+      tagClose
     }
   }
 }
@@ -56,16 +94,20 @@ export default {
 
 <style lang="less" scoped>
   .el-header {
-    background-color: #B3C0D1;
+    background-color: rgb(255, 255, 255);
   }
-
   .el-main {
+    padding: 9px;
     background-color: #E9EEF3;
-    color: #333;
-    height: calc(100% - 60px);
-    overflow: hidden;
   }
   .el-container{
     height: 100%;
+  }
+  .main-warp{
+    width: 100%;
+    height: 100%;
+    padding: 9px;
+    overflow: auto;
+    background: rgb(255, 255, 255);
   }
 </style>

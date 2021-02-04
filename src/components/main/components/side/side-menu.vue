@@ -1,6 +1,7 @@
 <template>
   <el-aside width="200px">
     <el-menu
+      :default-active="currentRoute.name"
       @select="handleSelect">
       <template v-for="item in menuList">
         <template v-if="showChildren(item)">
@@ -26,6 +27,7 @@
 </template>
 <script>
 import SideMenuItem from './side-menu-item'
+import { useRouter } from 'vue-router'
 import { showChildren, getName, getTitle, getIcon } from './mixin'
 export default {
   name:'sideMenu',
@@ -50,7 +52,8 @@ export default {
       getName,
       getTitle,
       handleSelect,
-      getIcon
+      getIcon,
+      currentRoute:useRouter().currentRoute
     }
   }
 }
