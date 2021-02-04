@@ -6,15 +6,11 @@ export default {
         tagNavList:[]
     },
     getters:{
-        menuList: () => getMenuByRouter(routes)
+        menuList: () => getMenuByRouter(routes),
     },
     mutations: {
-        setTagNavList(state, list = []){
-            state.tagNavList.length = 0
-            list.forEach(item => {
-                state.tagNavList.push(item)
-            })
-            // state.tagNavList = [...list]
+        setTagNavList(state, list){
+            state.tagNavList = [...list]
         },
         addTag(state, router){
             if(!routerIsexist(state.tagNavList, router)){

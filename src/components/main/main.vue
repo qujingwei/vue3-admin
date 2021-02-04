@@ -4,7 +4,7 @@
     <side-menu @on-select='turnToPage' :menu-list="menuList"></side-menu>
     <el-container>
       <el-header></el-header>
-      <tag-nav :list='tagList' :value="currentRoute" @on-select="tagSelect" @on-close="tagClose"></tag-nav>
+      <tag-nav :list='tagNavList' :value="currentRoute" @on-select="tagSelect" @on-close="tagClose"></tag-nav>
       <el-main>
         <div class="main-warp">
           <router-view></router-view>
@@ -17,8 +17,7 @@
 import SideMenu from './components/side/side-menu.vue'
 import TagNav from './components/tag-nav'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
-import { useStore } from 'vuex'
-import { onMounted } from 'vue'
+import { onMounted, getCurrentInstance, computed } from 'vue'
 import { routerEqual, getNextRoute } from '@/libs/utils'
 export default {
   name: 'Main',
@@ -27,10 +26,11 @@ export default {
     TagNav
   },
   setup(){
-    const store = useStore()
+    const { ctx } = getCurrentInstance()
+    const store = ctx.$store
+    const tagNavList = computed(() => store.state.app.tagNavList)
     const router = useRouter()
     const currentRoute = router.currentRoute
-    let tagList = store.state.app.tagNavList
     const addTag = function(route){
       const { name, params, query, meta, path } = route
       store.commit('addTag',{ name, params, query, meta, path })
@@ -55,10 +55,12 @@ export default {
         console.log('other');
       }else{
         if(routerEqual(route, currentRoute.value)){
-          let nextRoute = getNextRoute(tagList, route)
-          turnToPage(nextRoute)
+          let nextRoute = getNextRoute(tagNavList.value, route)
+          if(nextRoute){
+            turnToPage(nextRoute)
+          }
         }
-        const list = tagList.filter(item => !routerEqual(route, item))
+        const list = tagNavList.value.filter(item => !routerEqual(route, item))
         store.commit('setTagNavList', list)
       }
     }
@@ -82,11 +84,11 @@ export default {
     
     return {
       menuList:store.getters.menuList,
-      tagList,
       currentRoute,
       turnToPage,
       tagSelect,
-      tagClose
+      tagClose,
+      tagNavList
     }
   }
 }

@@ -6,12 +6,12 @@
             </div>
             <div class="nav-scroll-outer">
                 <div class="scroll-body">
-                    <el-tag v-for="item in tagList"
+                    <el-tag v-for="item in list"
                     :key="item.name"
                     @click="tagClick(item)"
                     @close="tagClose(item)"
                     :type="isCurrentTag(item) ? '' : 'info'" 
-                    :closable="tagList.length > 1">{{getTitle(item)}}</el-tag>
+                    :closable="list.length > 1">{{getTitle(item)}}</el-tag>
                 </div>
             </div>
             <div class="nav-right-btn">
@@ -23,7 +23,6 @@
 </template>
 <script>
 import { routerEqual } from '@/libs/utils'
-import { onMounted } from 'vue'
 export default {
     name: 'tagNav',
     props:{
@@ -41,12 +40,11 @@ export default {
         }
     },
     emits:['on-select','on-close'],
-    setup(props,{ emit }){
+    setup(props, { emit }){
         const tagClick = function(item){
             emit('on-select', item)
         }
         const tagClose = function(item){
-            console.log(111);
             emit('on-close', item)
         }
         const getTitle = function(item){
@@ -55,16 +53,11 @@ export default {
         const isCurrentTag = function(item){
             return routerEqual(item, props.value)
         }
-        onMounted(() => {
-            
-        })
         return {
             tagClick,
             tagClose,
             getTitle,
-            isCurrentTag,
-            tagList:props.list,
-            currentRoute:props.value
+            isCurrentTag
         }
     }
 }
