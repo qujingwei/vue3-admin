@@ -42,7 +42,6 @@ export const routerEqual = (route1, route2) => {
     return route1.name === route2.name && objEqual(params1, params2) && objEqual(query1, query2)
 }
 
-
 /**
  * 判断当前打开的路由列表是否存在 参数router
  * @param {Array} list 路由列表
@@ -59,4 +58,23 @@ export const getNextRoute = (list, route) => {
         }
     }
     return res
+}
+
+/**
+ * 获取home路由
+ */
+export const getHomeRoute = (routes, name='home') => {
+    let route = {}
+    for (let index = 0; index < routes.length; index++) {
+        const element = routes[index];
+        if(element.name === name){
+            route = element
+            break
+        }else{
+            if(element.children && element.children.length){
+                return getHomeRoute(element.children, name)
+            }
+        }
+    }
+    return route
 }

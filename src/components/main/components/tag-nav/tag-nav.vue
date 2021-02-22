@@ -17,7 +17,18 @@
             <div class="nav-right-btn">
                 <el-button style="padding:10px 7px;" size="medium" icon="el-icon-arrow-right"></el-button>
             </div>
-            <div class="nav-close-btn"></div>
+            <div class="nav-close-btn">
+                <el-dropdown @command="handleTagsOption">
+                    <el-button style="padding:10px;" size="medium" icon="el-icon-close"></el-button>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                        <el-dropdown-item command='all'>关闭所有</el-dropdown-item>
+                        <el-dropdown-item command='other'>关闭其他</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+                
+            </div>
         </div>
     </div>
 </template>
@@ -53,11 +64,15 @@ export default {
         const isCurrentTag = function(item){
             return routerEqual(item, props.value)
         }
+        const handleTagsOption = function(command){
+            emit('on-close', undefined, command)
+        }
         return {
             tagClick,
             tagClose,
             getTitle,
-            isCurrentTag
+            isCurrentTag,
+            handleTagsOption
         }
     }
 }

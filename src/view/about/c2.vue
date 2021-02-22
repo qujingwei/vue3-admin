@@ -1,16 +1,14 @@
 <template>
-    <span>首页</span>
+    这是第二个
     <el-input v-model="input" placeholder="请输入内容"></el-input>
 </template>
 <script>
-import { getTable } from '@/api'
 import { ref } from 'vue'
 export default {
-    name:'home',
+    name:'c2',
     setup(){
         let input = ref('')
-        console.log(getTable);
-        return {
+        return{
             input
         }
     }

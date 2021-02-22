@@ -1,4 +1,3 @@
-
 <template>
   <el-container>
     <side-menu @on-select='turnToPage' :menu-list="menuList"></side-menu>
@@ -7,7 +6,13 @@
       <tag-nav :list='tagNavList' :value="currentRoute" @on-select="tagSelect" @on-close="tagClose"></tag-nav>
       <el-main>
         <div class="main-warp">
-          <router-view></router-view>
+          <router-view>
+            <template #default="{ Component }">
+              <keep-alive :include="cacheList">
+                <component :is="Component"/>
+              </keep-alive>
+            </template>
+          </router-view>
         </div>
       </el-main>
     </el-container>
@@ -18,7 +23,9 @@ import SideMenu from './components/side/side-menu.vue'
 import TagNav from './components/tag-nav'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { onMounted, getCurrentInstance, computed } from 'vue'
-import { routerEqual, getNextRoute } from '@/libs/utils'
+import { routerEqual, getNextRoute, getHomeRoute } from '@/libs/utils'
+import config from '@/config'
+import routes from '@/router/routers'
 export default {
   name: 'Main',
   components:{
@@ -29,6 +36,9 @@ export default {
     const { ctx } = getCurrentInstance()
     const store = ctx.$store
     const tagNavList = computed(() => store.state.app.tagNavList)
+    const cacheList = computed(() => {
+      return tagNavList.value.length ? tagNavList.value.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []
+    })
     const router = useRouter()
     const currentRoute = router.currentRoute
     const addTag = function(route){
@@ -50,15 +60,15 @@ export default {
     }
     const tagClose = function(route, type){
       if(type === 'all'){
-        console.log('all');
+        let homeRoute = getHomeRoute(routes, config.homeName)
+        store.commit('setTagNavList', [homeRoute])
+        turnToPage(config.homeName)
       }else if(type === 'other'){
-        console.log('other');
+        store.commit('setTagNavList', [currentRoute.value])
       }else{
         if(routerEqual(route, currentRoute.value)){
           let nextRoute = getNextRoute(tagNavList.value, route)
-          if(nextRoute){
-            turnToPage(nextRoute)
-          }
+          if(nextRoute) turnToPage(nextRoute)
         }
         const list = tagNavList.value.filter(item => !routerEqual(route, item))
         store.commit('setTagNavList', list)
@@ -88,7 +98,8 @@ export default {
       turnToPage,
       tagSelect,
       tagClose,
-      tagNavList
+      tagNavList,
+      cacheList
     }
   }
 }

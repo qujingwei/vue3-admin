@@ -32,7 +32,8 @@ export default [
                 name:'home',
                 meta:{
                     title:'首页',
-                    icon:'el-icon-s-home'
+                    icon:'el-icon-s-home',
+                    notCache:true
                 },
                 component: () => import('@/view/home/home.vue'),
             }
@@ -53,7 +54,7 @@ export default [
                 meta:{
                     title:'其他2'
                 },
-                component: () => import('@/view/about/index'),
+                component: () => import('@/view/about/index.vue'),
             }
         ]
     },
@@ -64,5 +65,5 @@ export default [
             hideMenu: true
         },
         component: () => import('@/view/error-page/404.vue')
-      }
+    }
 ]
