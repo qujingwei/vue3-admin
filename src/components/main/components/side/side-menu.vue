@@ -1,6 +1,7 @@
 <template>
-  <el-aside width="200px">
+  <el-aside class="el-aside" width="auto">
     <el-menu
+      class="el-menu"
       :default-active="currentRoute.name"
       @select="handleSelect">
       <template v-for="item in menuList">
@@ -58,3 +59,11 @@ export default {
   }
 }
 </script>
+<style lang="less" scope>
+  .el-menu:not(.el-menu--collapse){
+    width: 200px;
+  }
+  .el-menu{
+    border: none;
+  }
+</style>

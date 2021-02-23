@@ -2,7 +2,9 @@
   <el-container>
     <side-menu @on-select='turnToPage' :menu-list="menuList"></side-menu>
     <el-container>
-      <el-header></el-header>
+      <el-header style="border-left: solid 1px #e6e6e6;">
+        <user/>
+      </el-header>
       <tag-nav :list='tagNavList' :value="currentRoute" @on-select="tagSelect" @on-close="tagClose"></tag-nav>
       <el-main>
         <div class="main-warp">
@@ -21,6 +23,7 @@
 <script>
 import SideMenu from './components/side/side-menu.vue'
 import TagNav from './components/tag-nav'
+import user from './components/header/user'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { onMounted, getCurrentInstance, computed } from 'vue'
 import { routerEqual, getNextRoute, getHomeRoute } from '@/libs/utils'
@@ -30,7 +33,8 @@ export default {
   name: 'Main',
   components:{
     SideMenu,
-    TagNav
+    TagNav,
+    user
   },
   setup(){
     const { ctx } = getCurrentInstance()
@@ -107,6 +111,7 @@ export default {
 
 <style lang="less" scoped>
   .el-header {
+    display: flex;
     background-color: rgb(255, 255, 255);
   }
   .el-main {
