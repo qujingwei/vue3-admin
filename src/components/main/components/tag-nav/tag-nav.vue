@@ -2,10 +2,10 @@
     <div class="tag-nav-wrapper">
         <div class="tags-nav">
             <div class="nav-left-btn">
-                <el-button style="padding:10px 7px;" size="medium" icon="el-icon-arrow-left"></el-button>
+                <el-button @click="handleTagScroll(200)" style="padding:10px 7px;" size="medium" icon="el-icon-arrow-left"></el-button>
             </div>
-            <div class="nav-scroll-outer">
-                <div class="scroll-body">
+            <div ref="scroll-outer" class="nav-scroll-outer">
+                <div ref="scroll-body" class="scroll-body" :style="{ left: tagData.bodyLeft + 'px' }">
                     <el-tag v-for="item in list"
                     :key="item.name"
                     @click="tagClick(item)"
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="nav-right-btn">
-                <el-button style="padding:10px 7px;" size="medium" icon="el-icon-arrow-right"></el-button>
+                <el-button @click="handleTagScroll(-200)" style="padding:10px 7px;" size="medium" icon="el-icon-arrow-right"></el-button>
             </div>
             <div class="nav-close-btn">
                 <el-dropdown @command="handleTagsOption">
@@ -33,6 +33,7 @@
 </template>
 <script>
 import { routerEqual } from '@/libs/utils'
+import { reactive, getCurrentInstance } from 'vue'
 export default {
     name: 'tagNav',
     props:{
@@ -50,7 +51,11 @@ export default {
         }
     },
     emits:['on-select','on-close'],
-    setup(props, { emit }){
+    setup(props){
+        const { ctx, emit } = getCurrentInstance()
+        const tagData = reactive({
+            bodyLeft: 0
+        })
         const tagClick = function(item){
             emit('on-select', item)
         }
@@ -66,12 +71,34 @@ export default {
         const handleTagsOption = function(command){
             emit('on-close', undefined, command)
         }
+        // tag-bar移动
+        const handleTagScroll = function(offset){
+            const scrollOuterWidth = ctx.$refs['scroll-outer'].offsetWidth
+            const scrollBodyWidth = ctx.$refs['scroll-body'].offsetWidth
+            if(offset > 0){
+                tagData.bodyLeft = tagData.bodyLeft + offset > 0 ? 0 : tagData.bodyLeft + offset
+            }else{
+                if(scrollOuterWidth > scrollBodyWidth){
+                    tagData.bodyLeft = 0
+                }else{
+                    const rightHiddenWidth = scrollBodyWidth + tagData.bodyLeft - scrollOuterWidth
+                    console.log(rightHiddenWidth);
+                    if(rightHiddenWidth > -offset){
+                        tagData.bodyLeft += offset
+                    }else{
+                        tagData.bodyLeft -= rightHiddenWidth
+                    }
+                }
+            }
+        }
         return {
             tagClick,
             tagClose,
             getTitle,
             isCurrentTag,
-            handleTagsOption
+            handleTagsOption,
+            handleTagScroll,
+            tagData
         }
     }
 }
