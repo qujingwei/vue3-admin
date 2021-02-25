@@ -4,8 +4,68 @@
             <div class="nav-left-btn">
                 <el-button @click="handleTagScroll(200)" style="padding:10px 7px;" size="medium" icon="el-icon-arrow-left"></el-button>
             </div>
-            <div ref="scroll-outer" class="nav-scroll-outer">
+            <div ref="scroll-outer"  @DOMMouseScroll="handleMousescroll" @mousewheel="handleMousescroll" class="nav-scroll-outer">
                 <div ref="scroll-body" class="scroll-body" :style="{ left: tagData.bodyLeft + 'px' }">
+                    <el-tag v-for="item in list"
+                    :key="item.name"
+                    @click="tagClick(item)"
+                    @close="tagClose(item)"
+                    :type="isCurrentTag(item) ? '' : 'info'" 
+                    :closable="list.length > 1">{{getTitle(item)}}</el-tag>
+                    <el-tag v-for="item in list"
+                    :key="item.name"
+                    @click="tagClick(item)"
+                    @close="tagClose(item)"
+                    :type="isCurrentTag(item) ? '' : 'info'" 
+                    :closable="list.length > 1">{{getTitle(item)}}</el-tag>
+                    <el-tag v-for="item in list"
+                    :key="item.name"
+                    @click="tagClick(item)"
+                    @close="tagClose(item)"
+                    :type="isCurrentTag(item) ? '' : 'info'" 
+                    :closable="list.length > 1">{{getTitle(item)}}</el-tag>
+                    <el-tag v-for="item in list"
+                    :key="item.name"
+                    @click="tagClick(item)"
+                    @close="tagClose(item)"
+                    :type="isCurrentTag(item) ? '' : 'info'" 
+                    :closable="list.length > 1">{{getTitle(item)}}</el-tag>
+                    <el-tag v-for="item in list"
+                    :key="item.name"
+                    @click="tagClick(item)"
+                    @close="tagClose(item)"
+                    :type="isCurrentTag(item) ? '' : 'info'" 
+                    :closable="list.length > 1">{{getTitle(item)}}</el-tag>
+                    <el-tag v-for="item in list"
+                    :key="item.name"
+                    @click="tagClick(item)"
+                    @close="tagClose(item)"
+                    :type="isCurrentTag(item) ? '' : 'info'" 
+                    :closable="list.length > 1">{{getTitle(item)}}</el-tag>
+                    <el-tag v-for="item in list"
+                    :key="item.name"
+                    @click="tagClick(item)"
+                    @close="tagClose(item)"
+                    :type="isCurrentTag(item) ? '' : 'info'" 
+                    :closable="list.length > 1">{{getTitle(item)}}</el-tag>
+                    <el-tag v-for="item in list"
+                    :key="item.name"
+                    @click="tagClick(item)"
+                    @close="tagClose(item)"
+                    :type="isCurrentTag(item) ? '' : 'info'" 
+                    :closable="list.length > 1">{{getTitle(item)}}</el-tag>
+                    <el-tag v-for="item in list"
+                    :key="item.name"
+                    @click="tagClick(item)"
+                    @close="tagClose(item)"
+                    :type="isCurrentTag(item) ? '' : 'info'" 
+                    :closable="list.length > 1">{{getTitle(item)}}</el-tag>
+                    <el-tag v-for="item in list"
+                    :key="item.name"
+                    @click="tagClick(item)"
+                    @close="tagClose(item)"
+                    :type="isCurrentTag(item) ? '' : 'info'" 
+                    :closable="list.length > 1">{{getTitle(item)}}</el-tag>
                     <el-tag v-for="item in list"
                     :key="item.name"
                     @click="tagClick(item)"
@@ -54,7 +114,8 @@ export default {
     setup(props){
         const { ctx, emit } = getCurrentInstance()
         const tagData = reactive({
-            bodyLeft: 0
+            bodyLeft: 0,
+            mousescrollDown:true
         })
         const tagClick = function(item){
             emit('on-select', item)
@@ -71,6 +132,20 @@ export default {
         const handleTagsOption = function(command){
             emit('on-close', undefined, command)
         }
+        const handleMousescroll = function(event){
+            if(tagData.mousescrollDown){
+                tagData.mousescrollDown = false
+                const type = event.type
+                    let delta = 0
+                    if (type === 'DOMMouseScroll' || type === 'mousewheel') {
+                        delta = (event.wheelDelta) ? event.wheelDelta : -(event.detail || 0) * 40
+                    }
+                    handleTagScroll(delta)
+                setTimeout(() => {
+                    tagData.mousescrollDown = true
+                },100)
+            }
+        }
         // tag-bar移动
         const handleTagScroll = function(offset){
             const scrollOuterWidth = ctx.$refs['scroll-outer'].offsetWidth
@@ -82,7 +157,6 @@ export default {
                     tagData.bodyLeft = 0
                 }else{
                     const rightHiddenWidth = scrollBodyWidth + tagData.bodyLeft - scrollOuterWidth
-                    console.log(rightHiddenWidth);
                     if(rightHiddenWidth > -offset){
                         tagData.bodyLeft += offset
                     }else{
@@ -98,6 +172,7 @@ export default {
             isCurrentTag,
             handleTagsOption,
             handleTagScroll,
+            handleMousescroll,
             tagData
         }
     }
@@ -127,6 +202,7 @@ export default {
                 white-space: nowrap;
                 position: absolute;
                 left: 0;
+                transition: left .3s ease;
             }
         }
         .nav-right-btn{
