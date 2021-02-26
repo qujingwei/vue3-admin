@@ -13,7 +13,7 @@
                     @click="tagClick(item)"
                     @close="tagClose(item)"
                     :type="isCurrentTag(item) ? '' : 'info'" 
-                    :closable="list.length > 1">{{getTitle(item)}}</el-tag>
+                    :closable="item.name !== homeName">{{getTitle(item)}}</el-tag>
                 </div>
             </div>
             <div class="nav-right-btn">
@@ -37,6 +37,7 @@
 import { routerEqual } from '@/libs/utils'
 import { reactive, getCurrentInstance, onBeforeUpdate, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import config from '@/config'
 export default {
     name: 'tagNav',
     props:{
@@ -155,7 +156,8 @@ export default {
             handleMousescroll,
             getTagElementByName,
             tagsPageOpened,
-            tagData
+            tagData,
+            homeName:config.homeName
         }
     }
 }

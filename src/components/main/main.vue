@@ -63,12 +63,16 @@ export default {
       turnToPage(route)
     }
     const tagClose = function(route, type){
+      let homeRoute = getHomeRoute(routes, config.homeName)
       if(type === 'all'){
-        let homeRoute = getHomeRoute(routes, config.homeName)
         store.commit('setTagNavList', [homeRoute])
         turnToPage(config.homeName)
       }else if(type === 'other'){
-        store.commit('setTagNavList', [currentRoute.value])
+        if(currentRoute.value.name === homeRoute.name){
+          store.commit('setTagNavList', [homeRoute])
+        }else{
+          store.commit('setTagNavList', [homeRoute, currentRoute.value])
+        }
       }else{
         if(routerEqual(route, currentRoute.value)){
           let nextRoute = getNextRoute(tagNavList.value, route)

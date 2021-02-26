@@ -32,8 +32,7 @@ export default [
                 name:'home',
                 meta:{
                     title:'首页',
-                    icon:'el-icon-s-home',
-                    notCache:true
+                    icon:'el-icon-s-home'
                 },
                 component: () => import('@/view/home/home.vue'),
             }
