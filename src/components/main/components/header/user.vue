@@ -21,9 +21,10 @@ export default {
   .user-dropdown{
     flex: 1 1 auto;
     text-align: right;
-    height: 100%;
-    line-height: 60px;
     cursor: pointer;
     margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 </style>

@@ -2,6 +2,7 @@
   <el-aside class="el-aside" width="auto">
     <el-menu
       class="el-menu"
+      :collapse="collapsed"
       :default-active="currentRoute.name"
       @select="handleSelect">
       <template v-for="item in menuList">
@@ -38,6 +39,10 @@ export default {
       default: function (){
         return []
       }
+    },
+    collapsed:{
+      type: Boolean,
+      default: false
     }
   },
   components:{

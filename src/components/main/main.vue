@@ -1,9 +1,10 @@
 <template>
   <el-container>
-    <side-menu @on-select='turnToPage' :menu-list="menuList"></side-menu>
+    <side-menu @on-select='turnToPage' :menu-list="menuList" :collapsed="collapsed"></side-menu>
     <el-container>
       <el-header style="border-left: solid 1px #e6e6e6;">
-        <user/>
+        <sider-trigger :collapsed="collapsed" @on-change='siderTriggerChange'/>
+        <user />
       </el-header>
       <tag-nav :list='tagNavList' :value="currentRoute" @on-select="tagSelect" @on-close="tagClose"></tag-nav>
       <el-main>
@@ -23,9 +24,10 @@
 <script>
 import SideMenu from './components/side/side-menu.vue'
 import TagNav from './components/tag-nav'
-import user from './components/header/user'
+import User from './components/header/user'
+import SiderTrigger from './components/header/sider-trigger'
 import { useRouter, onBeforeRouteLeave } from 'vue-router'
-import { onMounted, getCurrentInstance, computed } from 'vue'
+import { onMounted, getCurrentInstance, computed, ref } from 'vue'
 import { routerEqual, getNextRoute, getHomeRoute } from '@/libs/utils'
 import config from '@/config'
 import routes from '@/router/routers'
@@ -34,9 +36,11 @@ export default {
   components:{
     SideMenu,
     TagNav,
-    user
+    SiderTrigger,
+    User
   },
   setup(){
+    let collapsed = ref(false)
     const { ctx } = getCurrentInstance()
     const store = ctx.$store
     const tagNavList = computed(() => store.state.app.tagNavList)
@@ -51,13 +55,21 @@ export default {
     }
     
     onMounted(() => {
-      addTag(currentRoute.value)
+      let homeRoute = getHomeRoute(routes, config.homeName)
+      addTag(homeRoute)
+      if(currentRoute.value.name !== homeRoute.name){
+        addTag(currentRoute.value)
+      }
     })
     // 路由变化
     onBeforeRouteLeave((to) => {
       addTag(to)
     })
 
+    // 菜单折叠打开
+    const siderTriggerChange = function(val){
+      collapsed.value = val
+    }
     // tag标签逻辑
     const tagSelect = function(route){
       turnToPage(route)
@@ -107,7 +119,9 @@ export default {
       tagSelect,
       tagClose,
       tagNavList,
-      cacheList
+      cacheList,
+      collapsed,
+      siderTriggerChange
     }
   }
 }
