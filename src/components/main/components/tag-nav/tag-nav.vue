@@ -7,7 +7,9 @@
             <div ref="scroll-outer"  @DOMMouseScroll="handleMousescroll" @mousewheel="handleMousescroll" class="nav-scroll-outer">
                 <div ref="scroll-body" class="scroll-body" :style="{ left: tagData.bodyLeft + 'px' }">
                     <el-tag v-for="item in list"
+                    :ref="tagsPageOpened"
                     :key="item.name"
+                    :name="item.name"
                     @click="tagClick(item)"
                     @close="tagClose(item)"
                     :type="isCurrentTag(item) ? '' : 'info'" 
@@ -33,7 +35,8 @@
 </template>
 <script>
 import { routerEqual } from '@/libs/utils'
-import { reactive, getCurrentInstance } from 'vue'
+import { reactive, getCurrentInstance, onBeforeUpdate, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 export default {
     name: 'tagNav',
     props:{
@@ -53,10 +56,13 @@ export default {
     emits:['on-select','on-close'],
     setup(props){
         const { ctx, emit } = getCurrentInstance()
+        const route = useRoute()
         const tagData = reactive({
             bodyLeft: 0,
+            margin: 2,
             mousescrollDown:true
         })
+        let elTags = []
         const tagClick = function(item){
             emit('on-select', item)
         }
@@ -105,6 +111,40 @@ export default {
                 }
             }
         }
+        const moveToView = function(tag){
+            const scrollOuterWidth = ctx.$refs['scroll-outer'].offsetWidth
+            const scrollBodyWidth = ctx.$refs['scroll-body'].offsetWidth
+            if(scrollOuterWidth > scrollBodyWidth){
+                tagData.bodyLeft = 0
+            }else{
+                // 在可视区域的左侧
+                if(tag.offsetLeft < -tagData.bodyLeft){
+                    tagData.bodyLeft = -tag.offsetLeft + tagData.margin
+                }else if(tag.offsetLeft > -tag.offsetLeft && tag.offsetLeft + tag.offsetWidth < -tagData.bodyLeft + scrollOuterWidth){ //在可视区域
+                    tagData.bodyLeft = Math.min(0, scrollOuterWidth - tag.offsetLeft - tag.offsetWidth - tagData.margin)
+                }else { //在可视区域右侧
+                    tagData.bodyLeft = -(tag.offsetLeft + tag.offsetWidth + tagData.margin - scrollOuterWidth)
+                }
+            }
+        }
+        const getTagElementByName = function(name){
+            let item = elTags.find(item => item.$attrs && name === item.$attrs.name)
+            item && moveToView(item.$el)
+        }
+        const tagsPageOpened = function(tag){
+            tag && elTags.push(tag)
+        }
+        watch(() => route.name, (name) => {
+            getTagElementByName(name)
+        })
+        onBeforeUpdate(() => {
+            elTags = []
+        })
+        onMounted(() => {
+            setTimeout(function(){
+                getTagElementByName(route.name)
+            })
+        })
         return {
             tagClick,
             tagClose,
@@ -113,6 +153,8 @@ export default {
             handleTagsOption,
             handleTagScroll,
             handleMousescroll,
+            getTagElementByName,
+            tagsPageOpened,
             tagData
         }
     }

@@ -58,6 +58,158 @@ export default [
             }
         ]
     },
+    { 
+        path: '/about2', 
+        name: 'about2', 
+        component: Main,
+        meta:{
+            title:'其他1',
+            icon:'el-icon-s-cooperation'
+        },
+        children: [
+            {
+                path: '/index2', 
+                name: 'aboutIndex2', 
+                meta:{
+                    title:'其他2'
+                },
+                component: () => import('@/view/about/index.vue'),
+            }
+        ]
+    },
+    { 
+        path: '/about3', 
+        name: 'about3', 
+        component: Main,
+        meta:{
+            title:'其他1',
+            icon:'el-icon-s-cooperation'
+        },
+        children: [
+            {
+                path: '/index3', 
+                name: 'aboutIndex3', 
+                meta:{
+                    title:'其他2'
+                },
+                component: () => import('@/view/about/index.vue'),
+            }
+        ]
+    },
+    { 
+        path: '/about4', 
+        name: 'about4', 
+        component: Main,
+        meta:{
+            title:'其他1',
+            icon:'el-icon-s-cooperation'
+        },
+        children: [
+            {
+                path: '/index4', 
+                name: 'aboutIndex4', 
+                meta:{
+                    title:'其他2'
+                },
+                component: () => import('@/view/about/index.vue'),
+            }
+        ]
+    },
+    { 
+        path: '/about5', 
+        name: 'about5', 
+        component: Main,
+        meta:{
+            title:'其他1',
+            icon:'el-icon-s-cooperation'
+        },
+        children: [
+            {
+                path: '/index5', 
+                name: 'aboutIndex5', 
+                meta:{
+                    title:'其他2'
+                },
+                component: () => import('@/view/about/index.vue'),
+            }
+        ]
+    },
+    { 
+        path: '/about6', 
+        name: 'about6', 
+        component: Main,
+        meta:{
+            title:'其他1',
+            icon:'el-icon-s-cooperation'
+        },
+        children: [
+            {
+                path: '/index6', 
+                name: 'aboutIndex6', 
+                meta:{
+                    title:'其他2'
+                },
+                component: () => import('@/view/about/index.vue'),
+            }
+        ]
+    },
+    { 
+        path: '/about7', 
+        name: 'about7', 
+        component: Main,
+        meta:{
+            title:'其他1',
+            icon:'el-icon-s-cooperation'
+        },
+        children: [
+            {
+                path: '/index7', 
+                name: 'aboutIndex7', 
+                meta:{
+                    title:'其他2'
+                },
+                component: () => import('@/view/about/index.vue'),
+            }
+        ]
+    },
+    { 
+        path: '/about8', 
+        name: 'about8', 
+        component: Main,
+        meta:{
+            title:'其他1',
+            icon:'el-icon-s-cooperation'
+        },
+        children: [
+            {
+                path: '/index8', 
+                name: 'aboutIndex8', 
+                meta:{
+                    title:'其他2'
+                },
+                component: () => import('@/view/about/index.vue'),
+            }
+        ]
+    },
+    { 
+        path: '/about9', 
+        name: 'about9', 
+        component: Main,
+        meta:{
+            title:'其他1',
+            icon:'el-icon-s-cooperation'
+        },
+        children: [
+            {
+                path: '/index9', 
+                name: 'aboutIndex9', 
+                meta:{
+                    title:'其他2'
+                },
+                component: () => import('@/view/about/index.vue'),
+            }
+        ]
+    },
     {
         path: '/:pathMatch(.*)*',
         name: 'error_404',
