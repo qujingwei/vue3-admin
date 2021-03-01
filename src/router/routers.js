@@ -62,7 +62,7 @@ export default [
         name: 'about', 
         component: Main,
         meta:{
-            title:'其他1',
+            title:'其他',
             icon:'el-icon-s-cooperation'
         },
         children: [
@@ -70,11 +70,19 @@ export default [
                 path: '/index', 
                 name: 'aboutIndex', 
                 meta:{
-                    title:'其他2'
+                    title:'其他'
                 },
                 component: () => import('@/view/about/index.vue'),
             }
         ]
+    },
+    {
+        path: '/login',
+        name: 'login',
+        meta: {
+            hideMenu: true
+        },
+        component: () => import('@/view/login/login.vue')
     },
     {
         path: '/:pathMatch(.*)*',
