@@ -8,12 +8,13 @@
                 <c-2></c-2>
         </template>
     </keep-alive>
+    <el-button @click="closeTag">关闭</el-button>
 </template>
 <script>
 // import { getTable } from '@/api'
 import c1 from './c1'
 import c2 from './c2'
-import { ref } from 'vue'
+import { ref, getCurrentInstance } from 'vue'
 export default {
     name:'aboutIndex',
     components:{
@@ -22,9 +23,14 @@ export default {
     },
     setup(){
         let input = ref('')
+        const { ctx } = getCurrentInstance()
         
+        const closeTag = function(){
+            ctx.$store.commit('closeTag', ctx.$router.currentRoute.value)
+        }
         return {
-            input
+            input,
+            closeTag
         }
     }
 }

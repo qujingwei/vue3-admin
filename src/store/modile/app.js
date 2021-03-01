@@ -1,6 +1,7 @@
-import { getMenuByRouter, routerIsexist } from '@/libs/utils'
+import { getMenuByRouter, routerIsexist, getNextRoute, routerEqual } from '@/libs/utils'
 import routes from '@/router/routers'
-
+import router from '@/router'
+import config from '@/config'
 export default {
     state: {
         tagNavList:[]
@@ -12,14 +13,16 @@ export default {
         setTagNavList(state, list){
             state.tagNavList = [...list]
         },
-        addTag(state, router){
-            if(!routerIsexist(state.tagNavList, router)){
-                state.tagNavList.push(router)
+        addTag(state, route){
+            if(!routerIsexist(state.tagNavList, route)){
+                state.tagNavList.push(route)
             }
         },
-        closeTag(state, router){
-            if(routerIsexist(state.tagNavList, router)){
-                // const nextRouter = getNextRouter(router)
+        closeTag(state, route){
+            if(config.homeName !== route.name && routerIsexist(state.tagNavList, route)){
+                const nextRouter = getNextRoute(state.tagNavList, route)
+                state.tagNavList = state.tagNavList.filter(item => !routerEqual(route, item))
+                router.push(nextRouter)
             }
         }
     },

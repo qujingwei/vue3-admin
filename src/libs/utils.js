@@ -49,7 +49,7 @@ export const routerEqual = (route1, route2) => {
  */
 export const getNextRoute = (list, route) => {
     let res = null
-    if(list && list.length > 1){
+    if(list && list.length > 0){
         let index = list.findIndex(item => routerEqual(item, route))
         if(index === list.length - 1){
             res = list[index - 1]
