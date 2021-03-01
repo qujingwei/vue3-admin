@@ -1,9 +1,9 @@
 import { axios } from '@/libs/api.request'
 
-export const getTable = (data) => {
+export const getTable = (params) => {
     return axios.request({
-        url:'/api/table/get',
-        methods: 'get',
-        params: data
+        url:'/data/table',
+        method: 'get',
+        params: params
     })
 }

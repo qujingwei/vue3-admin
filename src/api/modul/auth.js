@@ -1,8 +1,8 @@
 import { axios } from '@/libs/api.request'
 
-export const getAuth = (data) => {
+export const login = (data) => {
     return axios.request({
-        url:'/api/auth/get',
+        url:'/auth/login',
         methods: 'get',
         params: data
     })

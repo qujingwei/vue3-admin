@@ -40,9 +40,9 @@ class HttpRequest {
     }
     request(config){
         config = Object.assign(this.getInstanceConfig(), config)
-        const instance = axios.create(config)
+        const instance = axios.create(config, config.url)
         this.interceptors(instance)
-        return instance()
+        return instance(config)
     }
 }
 export default HttpRequest

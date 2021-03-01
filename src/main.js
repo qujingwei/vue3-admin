@@ -5,6 +5,10 @@ import App from './App.vue';
 import router from './router'
 import store from './store'
 
+if(process.env.NODE_ENV !== 'production'){
+    require('@/mock')
+}
+
 const app = createApp(App)
 app.use(ElementPlus)
 app.use(router)

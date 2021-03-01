@@ -78,3 +78,50 @@ export const getHomeRoute = (routes, name='home') => {
     }
     return route
 }
+
+/**
+ * 多次执行callback
+ */
+export const doCustomTimes = (i, callback) => {
+    let time = 0
+    while(i > time){
+        time++
+        callback()
+    }
+}
+
+
+/**
+ * mock数据补充
+ */
+export const dataSupplement = (data,code='00000', message='') => {
+    return {
+        code:code,
+        message:message,
+        data:data
+    }
+}
+
+/**
+ * 获取mock请求参数
+ */
+export const getMockParams = (req) => {
+    let { url, type, body } = req
+    let params = {}
+    type = type.toUpperCase()
+    if(type === 'GET'){
+        const keyValueArr = url.split('?')[1].split('&')
+        keyValueArr.forEach(item => {
+            const keyValue = item.split('=')
+            params[keyValue[0]] = keyValue[1]
+        })
+    }else if(type === 'POST'){
+        try{
+            params = JSON.parse(body)
+        }catch(err){
+            params = {}
+        }
+    }
+    return params
+}
+
