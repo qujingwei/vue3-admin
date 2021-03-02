@@ -4,14 +4,14 @@
             <div class="login-form-head">
                 <span>欢迎登录</span>
             </div>
-            <el-form :label-position="labelPosition" :model="form" class="login-form-body">
-                <el-form-item>
-                    <el-input v-model="form.userName">
+            <el-form ref="login-form" :label-position="labelPosition" :model="form" :rules="rules" class="login-form-body">
+                <el-form-item prop="userName">
+                    <el-input v-model="form.userName" placeholder="123">
                         <template #prepend><i class="el-icon-user-solid"></i></template>
                     </el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-input v-model="form.passWord" show-password>
+                <el-form-item prop="passWord">
+                    <el-input v-model="form.passWord" show-password  placeholder="123">
                         <template #prepend><i class="el-icon-view"></i></template>
                     </el-input>
                 </el-form-item>
@@ -23,24 +23,40 @@
     </div>
 </template>
 <script>
-import { reactive } from 'vue'
+import { reactive, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 export default {
     name:'login',
     setup() {
+        const { ctx } = getCurrentInstance()
         const router = useRouter()
         let form = reactive({
             userName:'',
             passWord:''
         })
+        const rules = reactive({
+            userName: [
+                { required: true, message: '请输入账号', trigger: 'change' }
+            ],
+            passWord: [
+                { required: true, message: '请输入密码', trigger: 'change' }
+            ]
+        })
         const onSubmit = function(){
-            router.push({
-                name:'home'
+            ctx.$refs['login-form'].validate((valid) => {
+                console.log(valid);
+                if(valid){
+                    router.push({
+                        name:'home'
+                    })
+                }
             })
+            
         }
         return {
             form,
-            onSubmit
+            onSubmit,
+            rules
         }
     }
 }
