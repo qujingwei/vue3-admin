@@ -10,7 +10,6 @@
         </template>
     </el-dropdown>
   </div>
-  
 </template>
 <script>
 export default {
@@ -19,7 +18,7 @@ export default {
 </script>
 <style lang="less" scope>
   .user-dropdown{
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     text-align: right;
     cursor: pointer;
     margin-right: 20px;

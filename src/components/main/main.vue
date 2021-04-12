@@ -4,6 +4,7 @@
     <el-container>
       <el-header style="border-left: solid 1px #e6e6e6;">
         <sider-trigger :collapsed="collapsed" @on-change='siderTriggerChange'/>
+        <div style="flex: 1 1 auto;"></div>
         <user />
       </el-header>
       <tag-nav :list='tagNavList' :value="currentRoute" @on-select="tagSelect" @on-close="tagClose"></tag-nav>
